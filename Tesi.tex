@@ -1,0 +1,194 @@
+\documentclass[a4paper,12pt]{report}
+
+% Definizioni
+\def\titolotesi{Uso di Computer Quantistici per lo studio di sistemi elementari}
+\def\laureando{Davide Pruscini}
+\def\annoaccademico{2019--2020}
+
+%Commenti
+\usepackage{verbatim}
+\usepackage[hyphens]{url}
+
+\begin{comment}
+File previsti in input:
+	Introduzione.tex
+	Capitolo1.tex
+	Capitolo2.tex
+	Capitolo3.tex
+	Conclusioni.tex
+	Bibliografia.bib
+	Codice.tex
+	Glossario.tex
+	LinkFigure.tex
+\end{comment}
+
+% Title Page
+\title{\begin{large}\textbf{\titolotesi}\end{large}}
+\author{\laureando}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    citecolor=black,
+    linkcolor=black,     
+    urlcolor=cyan,
+}
+
+% Citazioni
+\usepackage{dirtytalk}
+
+% Equazioni, Matrici ecc.
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{siunitx}
+
+% Righe multiple tabella
+\usepackage{multirow}
+\usepackage{adjustbox}
+
+%Parole accentate
+\usepackage[T1]{fontenc}
+%\usepackage[utf8x]{inputenc}
+
+%Parole di sistema in italiano (Indice, Capitolo, ...)
+\usepackage[italian]{babel}
+
+%Colori
+\usepackage{xcolor}
+\usepackage{url}
+
+%Codice
+\usepackage{minted}
+\usepackage{listings}
+
+%Accostare Figure e Table
+\usepackage{caption}
+\usepackage{subcaption}
+
+%Impaginazione
+\usepackage{fancyhdr}
+\fancyhf{}
+\fancyfoot[LE,RO]{\thepage}
+
+\usepackage{epsfig}
+
+%Numero di pagina romano
+\pagenumbering{Roman}
+
+%\usepackage{setspace}
+\newlength\sinistra
+\newlength\corpo
+\newlength\pagina
+\setlength {\pagina} {21cm}
+\setlength {\sinistra} {1.46cm}
+\setlength {\corpo} {13.5cm}
+\textwidth \the\corpo
+\hoffset \the\sinistra
+\paperwidth \the\pagina
+\linespread{1.6}
+
+\begin{document}
+
+%FRONTESPIZIO
+\begin{titlepage}
+
+\begin{center}
+\textsc{\Large Università degli Studi di Perugia}\medskip\\
+
+{\Large Dipartimento di Matematica e Informatica}\medskip\\
+
+\rule{10mm}{0.01mm}\medskip\\
+
+{\small \textsc{Corso di Laurea Triennale in Informatica}}\medskip\\
+
+\vspace*{3mm}
+
+\includegraphics[scale=0.70]{LogoUniPG.png}
+
+\Large Tesi di Laurea \par\bigskip
+
+{\large \bf \titolotesi \par}
+
+\end{center}\par
+
+\hspace{0.05cm}Laureando:\hspace{7.3cm}Relatore:\par
+
+\hspace{0.0cm}\emph{\laureando}\hfill\emph{Prof.~Osvaldo Gervasi}
+\hspace*{7cm}\ \hfill \emph{Dott. Damiano Perri}
+\hspace*{7cm}\ \hfill \emph{Dott. Marco Simonetti}
+\vfill
+
+\begin{center}
+
+\rule{40mm}{0.01mm}
+
+Anno Accademico \annoaccademico
+
+\end{center}
+
+\end{titlepage}
+
+%INDICE
+%Numero di sottocapitoli da mostrare
+\setcounter{tocdepth}{3}
+%Numero di sottocapitoli da numerare
+\setcounter{secnumdepth}{3}
+\tableofcontents
+
+%ELENCO DELLE FIGURE
+\listoffigures
+
+%ELENCO DELLE TABELLE
+\listoftables
+
+%CORPO TESI
+\pagestyle{fancy}
+
+%INTRODUZIONE
+\input{Introduzione}
+\addcontentsline{toc}{chapter}{Introduzione}
+
+\begin{comment}
+Tutti i capitoli dovranno iniziare con la seguente intestazione:
+\chapter{Titolo capitolo}
+\fancyhead[RO, LE]{\bfseries Titolo capitolo}
+\end{comment}
+
+%CAPITOLI
+\input{Capitolo1}
+\input{Capitolo2}
+\input{Capitolo3}
+
+%CONCLUSIONI
+\input{Conclusioni}
+\addcontentsline{toc}{chapter}{Conclusioni}
+
+\newpage 
+% BIBLIOGRAFIA
+\addcontentsline{toc}{chapter}{Bibliografia}
+\fancyhead[RO, LE]{\bfseries Bibliografia}
+%\nocite{*}
+\bibliographystyle{unsrt}
+\bibliography{Bibliografia}
+
+%PAGINA RINGRAZIAMENTI
+\chapter*{Ringraziamenti}
+\fancyhead[RO, LE]{\bfseries Ringraziamenti}
+Ringrazio il Prof. Gervasi per essere sempre stato disponibile ed avermi dato l'opportunità di svolgere questa tesi, facendomi così avvicinare al mondo della computazione quantistica.
+
+Dei sentiti ringraziamenti vanno anche al Dott. Damiano Perri e al Dott. Marco Simonetti, senza i loro preziosi consigli e la loro pazienza non sarei riuscito a portare a termine l'elaborato.
+
+Un grande ringraziamento va alla mia famiglia che mi ha sempre supportato nella mia carriera accademica, agli amici di sempre e a quelli che lo sono diventati nel corso di questi tre anni.
+
+Grazie a tutte le persone che mi sono state vicino aiutandomi a diventare chi sono oggi, inclusi tutti i docenti,
+che sono riusciti ad alimentare la passione che ho nei confronti dell'informatica.
+
+% APPENDICE CON IL CODICE SVILUPPATO
+\appendix
+\linespread{1}
+\input{Codice}
+\input{Glossario}
+\input{LinkFigure}
+
+\end{document}

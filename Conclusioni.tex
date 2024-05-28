@@ -1,0 +1,14 @@
+\chapter*{Conclusioni}
+\fancyhead[RO, LE]{\bfseries Conclusioni}
+Come si può dedurre dal capitolo precedente, i risultati ottenuti per la molecola d'Idrogeno $H_2$, utilizzando l'algoritmo ibrido VQE, sono tutti tra loro confrontabili.
+
+Attraverso la realizzazione del circuito TwoLocal composto dalle porte logiche quantistiche RY, RZ e CZ, siamo riusciti ad ottenere risultati molto simili a quelli ricavati dall'algoritmo classico NumPyMinimumEigensolver.
+
+I due ottimizzatori che si sono distinti per tempi di esecuzione e bontà del grafico sono stati L\_BFGS\_B e SLSQP: entrambi hanno permesso di effettuare una simulazione in poco più di 20 minuti se consideriamo il backend Aer, più moderno e prestante.
+
+Purtroppo non si è potuto notare un miglioramento utilizzando l'accelerazione hardware della scheda video, pur avendo provato su macchine differenti e teoricamente più performanti.
+Questo potrebbe essere causato da qualche metodo di classe all'interno delle librerie Qiskit che ad oggi non riesce ancora probabilmente a gestire correttamente le GPU.
+
+Per quanto riguarda invece la molecola $LiH$, Idruro di Litio, è stato svolto un solo test in quanto, come si è potuto notare, ha impiegato veramente troppo tempo.
+
+Considerando la community di Qiskit molto attiva, sarà probabilmente possibile in futuro eseguire gli stessi esperimenti ottenendo risultati migliori in tempi più brevi, con la possibilità inoltre di effettuare variazioni al codice da noi scritto.

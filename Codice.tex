@@ -1,0 +1,129 @@
+\chapter{Codice}\label{codice:vqe}
+\fancyhead[RO, LE]{\bfseries Codice}
+Nel paragrafo seguente viene riportato il codice Python necessario per svolgere una simulazione sulla molecola d'Idrogeno.
+Verrà utilizzato il circuito TwoLocal in coppia con l'ottimizzatore SLSQP; il backend Aer ci consentirà di specificare la direttiva \textit{statevector\_gpu} per l'utilizzo della scheda video.
+
+\section{H2 - TwoLocal - SLSQP - Aer - GPU}
+\begin{footnotesize}
+\begin{minted}[linenos=tru]{python}
+from time import time
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+from qiskit import Aer
+from qiskit.aqua import aqua_globals, QuantumInstance
+from qiskit.aqua.algorithms import NumPyMinimumEigensolver, VQE
+from qiskit.aqua.components.optimizers import SLSQP
+from qiskit.circuit.library import TwoLocal
+from qiskit.chemistry.drivers import PySCFDriver, UnitsType
+from qiskit.chemistry.core import Hamiltonian, QubitMappingType
+
+start = 0.2
+step = 0.05
+end = 3.5
+d = np.arange(start, end + step, step)
+molecule = "H .0 .0 .0; H .0 .0 {0}"
+energies = np.zeros(d.size)
+hf_energies = np.zeros_like(energies)
+distances = np.zeros_like(energies)
+
+# NumPyMinimumEigensolver
+for i, v in enumerate(d):
+    driver = PySCFDriver(atom=molecule.format(v),
+    unit=UnitsType.ANGSTROM,
+    basis='sto3g')
+    
+    qmolecule = driver.run()
+    operator = Hamiltonian(qubit_mapping=QubitMappingType.PARITY,
+                           two_qubit_reduction=False)
+    qubit_op, aux_ops = operator.run(qmolecule)
+    result = NumPyMinimumEigensolver(qubit_op).run()
+    result = operator.process_algorithm_result(result)
+    energies[i] += result.energy
+    hf_energies[i] += result.hartree_fock_energy
+    distances[i] += v
+    
+print('Distances: ', distances)
+print('Energies:', energies)
+print('Hartree-Fock energies:', hf_energies)
+
+plt.figure(figsize=(15,10))
+plt.plot(distances, hf_energies,
+label="Hartree-Fock")
+plt.plot(distances, energies,
+label="MinimumEigensolver")
+
+plt.xlabel("Interatomic distance (Angstrom)")
+plt.ylabel("Energy (Hartree)")
+plt.legend()
+plt.grid()
+
+# VQE
+aqua_globals.random_seed = 50
+
+energies = np.zeros(d.size)
+hf_energies = np.zeros_like(energies)
+distances = np.zeros_like(energies)
+
+qi = QuantumInstance(Aer.get_backend('statevector_simulator'),
+                    backend_options={"method":"statevector_gpu"},
+                    seed_simulator=aqua_globals.random_seed,
+                    seed_transpiler=aqua_globals.random_seed)
+
+start_time = time()
+for i, v in enumerate(d):
+    driver = PySCFDriver(atom=molecule.format(v),
+                        unit=UnitsType.ANGSTROM,
+                        basis='sto3g')
+    
+    qmolecule = driver.run()
+    operator = Hamiltonian(qubit_mapping=QubitMappingType.PARITY,
+                           two_qubit_reduction=False)
+    qubit_op, aux_ops = operator.run(qmolecule)
+    optimizer = SLSQP(maxiter=250)
+    var_form = TwoLocal(qubit_op.num_qubits, ['ry', 'rz'],
+                        'cz', reps=5)
+    algo = VQE(qubit_op, var_form, optimizer)
+    result = algo.run(qi)
+    result = operator.process_algorithm_result(result)
+    energies[i] += result.energy
+    hf_energies[i] += result.hartree_fock_energy
+    distances[i] += v
+
+execution_time = (time() - start_time)
+
+print('Distances: ', distances)
+print('Energies:', energies)
+print('Hartree-Fock energies:', hf_energies)
+print('Execution time (minutes):', (execution_time/60))
+
+var_form.draw(output="mpl")
+
+plt.figure(figsize=(15,10))
+plt.plot(distances, hf_energies,
+label="Hartree-Fock")
+plt.plot(distances, energies,
+label="VQE")
+
+plt.xlabel("Interatomic distance (Angstrom)")
+plt.ylabel("Energy (Hartree)")
+plt.legend()
+plt.grid()
+
+# Python 3.8.5
+# Qiskit version
+import qiskit
+print(qiskit.__qiskit_version__)
+
+'''
+{'qiskit-terra': '0.15.2',
+ 'qiskit-aer-gpu': '0.6.1',
+ 'qiskit-ignis': '0.4.0',
+ 'qiskit-ibmq-provider': '0.10.0',
+ 'qiskit-aqua': '0.7.5',
+ 'qiskit': '0.22.0'}
+'''
+\end{minted}
+\end{footnotesize}
+
