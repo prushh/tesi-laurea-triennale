@@ -16,4 +16,4 @@ __Corso di Laurea__: Informatica
 
 ### Licenza
 
-Questo elaborato è concesso su licenza MIT - si prega di visionare il file [LICENSE](LICENSE) per i dettagli.
+Questo elaborato è concesso su __Licenza MIT__ - si prega di visionare il file [LICENSE](LICENSE) per i dettagli.
