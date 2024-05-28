@@ -4,6 +4,10 @@ __Titolo__: Uso di Computer Quantistici per lo studio di sistemi elementari
 
 __Autore__: Davide Pruscini
 
+__Relatore__: Prof. Osvaldo Gervasi
+
+__Correlatori__: Dott. Marco Simonetti, Dott. Damiano Perri
+
 __Anno accademico__: 2019/2020
 
 __Università__: Università degli Studi di Perugia
